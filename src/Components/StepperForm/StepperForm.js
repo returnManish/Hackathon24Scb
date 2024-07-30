@@ -1,12 +1,15 @@
 // src/App.js
-import React, { useEffect, useState } from 'react';
-import { Container, Stepper, Step, StepLabel, Button, Typography ,Paper,Box} from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Stepper, Step, StepLabel, Button, Typography, Paper, Box } from '@mui/material';
 import PersonalDetails from '../PersonalDetails/PersonalDetails';
 import InvestmentDetails from '../InvestmentDetails/InvestmentDetails';
 import ReviewDetails from '../ReviewDetails/ReviewDetails';
-import { getData ,postData,updateData} from '../ApiService/ApiService';
+import FinancialDetails from '../FinancialDetails/FinancialDetails';
+import BehavioralDetails from '../BehavioralDetails/BehavioralDetails';
+import { getData, postData, updateData } from '../ApiService/ApiService';
+import Alert from '../Alert/CustomizedAlert';
 
-const steps = ['Personal Details', 'Investment Details', 'Review Details'];
+const steps = ['Personal Details', 'Investment Details', 'Financial Details', 'Behavioral Details', 'Review Details'];
 
 function StepperForm() {
   const [activeStep, setActiveStep] = useState(0);
@@ -19,15 +22,36 @@ function StepperForm() {
     savings: '',
     salarySlip: null,
     financialRequirement: '',
-    riskTolerance: 0,
+    riskTolerance: '',
     savingsPlan: '',
+    investmentPortfolio: '',
+    investmentGoal: '',
+    investmentFrequency: '',
+    investmentPreferences: '',
+    investmentValue: '',
+    income: '',
+    expenses: '',
+    assets: '',
+    liabilities: '',
+    creditScore: '',
+    monthlySavings: '',
+    monthlySpending: '',
+    numTransactions: '',
+    spendingHabit: '',
+    savingHabit: '',
+    financialLiteracy: '',
+    gender: '',
+    marital_status: '',
+    education_level: '',
+    address: '',
+    numDependents: '',
+    employmentStatus: '',
   });
 
   const [data, setData] = useState([]);
-
-//   useEffect(() => {
-//     fetchData();
-//   }, []);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [severity, setSeverity] = useState("");
 
   const fetchData = async () => {
     try {
@@ -40,23 +64,49 @@ function StepperForm() {
 
   const handlePost = async () => {
     try {
-        console.log("formdata to be posted->" , formData);
+      console.log("formdata to be posted->", formData);
       const newData = await postData(formData);
       setData([...data, newData]);
+      setSeverity("success");
+      setAlertMessage("Details submitted successfully..");
+      setOpenAlert(true);
+
       setFormData({
         name: '',
         age: '',
         email: '',
         phone: '',
-        occupation: '',
-        annualIncome: '',
+        salary: '',
+        savings: '',
         salarySlip: null,
-        employerAddress: '',
         financialRequirement: '',
-        riskTolerance: 0,
+        riskTolerance: '',
+        savingsPlan: '',
+        investmentPortfolio: '',
+        investmentGoal: '',
+        investmentFrequency: '',
+        investmentPreferences: '',
+        investmentValue: '',
+        income: '',
+        expenses: '',
+        assets: '',
+        liabilities: '',
+        creditScore: '',
+        monthlySavings: '',
+        monthlySpending: '',
+        numTransactions: '',
+        spendingHabit: '',
+        savingHabit: '',
+        financialLiteracy: '',
+        gender: '',
+        marital_status: '',
+        education_level: '',
+        address: '',
+        numDependents: '',
+        employmentStatus: '',
       });
-      console.log("data from api->" , data);
-      console.log("fromdata afterpost in fronted->" , formData);
+      console.log("data from api->", data);
+      console.log("formdata after post in frontend->", formData);
 
     } catch (error) {
       console.error('Error posting data:', error);
@@ -72,8 +122,69 @@ function StepperForm() {
     }
   };
 
-
   const handleNext = () => {
+    if(activeStep === 0){
+      if (
+        formData.name === "" ||
+        formData.age === "" ||
+        formData.email=== "" ||
+        formData.phone=== "" ||
+        formData.education_level== ""
+      ) {
+        console.log(formData);
+        setSeverity("error");
+        setAlertMessage("Please fill all the required fields");
+        setOpenAlert(true);
+        return;
+      }
+    }
+
+    if(activeStep === 1){
+      if (
+        formData.riskTolerance === "" ||
+        formData.investmentGoal === "" ||
+        formData.investmentValue=== "" 
+      ) {
+        console.log(formData);
+        setSeverity("error");
+        setAlertMessage("Please fill all the required fields");
+        setOpenAlert(true);
+        return;
+      }
+    }
+
+    if(activeStep === 2){
+      if (
+        formData.income === "" ||
+        formData.assets === "" ||
+        formData.liabilities=== ""||
+        formData.expenses === "" ||
+        formData.monthlySavings === "" ||
+        formData.monthlySpending=== "" 
+      ) {
+        console.log(formData);
+        setSeverity("error");
+        setAlertMessage("Please fill all the required fields");
+        setOpenAlert(true);
+        return;
+      }
+    }
+
+    // if(activeStep === 3){
+    //   if (
+    //     applicationForm.current_occupation === "" ||
+    //     applicationForm.annual_income === "" ||
+    //     applicationForm.employer_address === "" ||
+    //     !salaryFile
+    //   ) {
+    //     console.log(applicationForm);
+    //     setSeverity("error");
+    //     setAlertMessage("Please fill all the required fields");
+    //     setOpenAlert(true);
+    //     return;
+    //   }
+    // }
+     
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -92,8 +203,30 @@ function StepperForm() {
       savings: '',
       salarySlip: null,
       financialRequirement: '',
-      riskTolerance: 0,
+      riskTolerance: '',
       savingsPlan: '',
+      investmentPortfolio: '',
+      investmentGoal: '',
+      investmentFrequency: '',
+      investmentPreferences: '',
+      investmentValue: '',
+      income: '',
+      expenses: '',
+      assets: '',
+      liabilities: '',
+      creditScore: '',
+      monthlySavings: '',
+      monthlySpending: '',
+      numTransactions: '',
+      spendingHabit: '',
+      savingHabit: '',
+      financialLiteracy: '',
+      gender: '',
+      marital_status: '',
+      education_level: '',
+      address: '',
+      numDependents: '',
+      employmentStatus: '',
     });
   };
 
@@ -102,115 +235,116 @@ function StepperForm() {
   };
 
   return (
-    <Container>
-      <br />
-      <h2 style={{ textAlign: "center", color: "GrayText" ,fontSize:"2rem"}}>
-      Financial Advisor Form
-      </h2>
-      <br />
-      <Box sx={{ width: "60vw", margin: "auto" }}>
-        <Stepper color="success" activeStep={activeStep} alternativeLabel>
-          {steps.map((label) => (
-            <Step
-              key={label}
-              sx={{
-                "& .MuiStepLabel-root .Mui-completed": {
-                  color: "green", // circle color (COMPLETED)
-                },
-                "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
+    <>
+
+      <Alert
+        openAlert={openAlert}
+        alertMessage={alertMessage}
+        setOpenAlert={setOpenAlert}
+        severity={severity}
+      />
+
+      <Container>
+        <br />
+        <h2 style={{ textAlign: "center", color: "GrayText", fontSize: "2rem" }}>
+          Financial Advisor Form
+        </h2>
+        <br />
+        <Box sx={{ width: "60vw", margin: "auto" }}>
+          <Stepper color="success" activeStep={activeStep} alternativeLabel>
+            {steps.map((label) => (
+              <Step
+                key={label}
+                sx={{
+                  "& .MuiStepLabel-root .Mui-completed": {
+                    color: "green", // circle color (COMPLETED)
+                  },
+                  "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
                   {
                     color: "green", // Just text label (COMPLETED)
                   },
-                "& .MuiStepLabel-root .Mui-active": {
-                  color: "#0c77b9", // circle color (ACTIVE)
-                },
-                "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
+                  "& .MuiStepLabel-root .Mui-active": {
+                    color: "#0c77b9", // circle color (ACTIVE)
+                  },
+                  "& .MuiStepLabel-label.Mui-active.MuiStepLabel-alternativeLabel":
                   {
                     color: "#0c77b9", // Just text label (ACTIVE)
                   },
-                "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
-                  fill: "white", // circle's number (ACTIVE)
-                },
-                "& .css-1hv8oq8-MuiStepLabel-label":{
+                  "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                    fill: "white", // circle's number (ACTIVE)
+                  },
+                  "& .css-1hv8oq8-MuiStepLabel-label": {
                     fontSize: "1rem",
-                },
-              }}
-            >
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </Box>
-      <br />
-
-
-      <Paper
-        elevation={5}
-        style={{
-          padding: "2vw",
-          maxWidth: "60vw",
-          display: "block",
-          margin: "auto",
-        }}
-      >
-      
+                  },
+                }}
+              >
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </Box>
+        <br />
+        <Paper
+          elevation={5}
+          style={{
+            padding: "2vw",
+            maxWidth: "60vw",
+            display: "block",
+            margin: "auto",
+            overflowY: activeStep === 4 ? 'auto' : 'visible', // Add scrollbar for Review Details
+            maxHeight: activeStep === 4 ? '30rem' : '', // Limit height for scrollbar
+          }}
+        >
           {activeStep === 0 && (
             <PersonalDetails formData={formData} setFormData={handleFormDataChange} />
           )}
           {activeStep === 1 && (
             <InvestmentDetails formData={formData} setFormData={handleFormDataChange} />
           )}
-          {activeStep === 2 && <ReviewDetails formData={formData} />}
-      </Paper>
+          {activeStep === 2 && (
+            <FinancialDetails formData={formData} setFormData={handleFormDataChange} />
+          )}
+          {activeStep === 3 && (
+            <BehavioralDetails formData={formData} setFormData={handleFormDataChange} />
+          )}
+          {activeStep === 4 && (
+            <ReviewDetails formData={formData} />
+          )}
+        </Paper>
 
-         {/* <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
-            <Button disabled={activeStep === 0} onClick={handleBack}>
+        <div style={{ display: "flex", justifyContent: "center", margin: '30px' }}>
+          {(
+            <Button
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              color="error"
+              variant="contained"
+            >
               Back
             </Button>
+          )}
+          &nbsp;&nbsp;
+          {activeStep < 4 && (
             <Button
-              variant="contained"
-              color="primary"
               onClick={handleNext}
-              style={{ marginLeft: 'auto' }}
+              color="primary"
+              variant="contained"
             >
-              {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+              Next
             </Button>
-          </div> */}
-
-          <div style={{ display: "flex", justifyContent: "center" ,margin:'30px'}}>
-        {(
-          <Button
-            disabled={activeStep === 0}
-            onClick={handleBack}
-            color="error"
-            variant="contained"
-          >
-            Back
-          </Button>
-        )}
-        &nbsp;&nbsp;
-        {activeStep < 2 && (
-          <Button
-            onClick={handleNext}
-            color="primary"
-            variant="contained"
-          >
-            Next
-          </Button>
-        )}
-        {activeStep === 2 && (
-          <Button
-            color="success"
-            variant="contained"
-            onClick={handlePost}
-          >
-            Submit
-          </Button>
-        )}
-      </div>
-      
-    </Container>
-    
+          )}
+          {activeStep === 4 && (
+            <Button
+              color="success"
+              variant="contained"
+              onClick={handlePost}
+            >
+              Submit
+            </Button>
+          )}
+        </div>
+      </Container>
+    </>
   );
 }
 
